@@ -467,3 +467,18 @@ exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
       });
     });
 };
+
+// Retrieve all events by semester
+exports.getEventsBySemesterId = (req, res) => {
+  Event.findAll({
+    where: { semesterId: { [Op.eq]: req.params.semesterId } },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};
