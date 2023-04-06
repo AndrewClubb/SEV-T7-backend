@@ -55,6 +55,6 @@ jobs:
             cd nodeapps/performance/t7
             npm install
             sudo systemctl stop performance-t7-backend
-            sudo cp performance-t2-backend.service /lib/systemd/system/performance-t7-backend.service
+            sudo cp performance-t7-backend.service /lib/systemd/system/performance-t7-backend.service
             sudo systemctl daemon-reload
             sudo systemctl start performance-t7-backend
