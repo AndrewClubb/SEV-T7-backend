@@ -1,0 +1,60 @@
+name: DEPLOY TO STAGING
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
+
+jobs:
+  aws-deploy:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PW: ${{ secrets.DB_PW}}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      CLIENT_ID: ${{secrets.CLIENT_ID}}
+      CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: dev
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install
+      - run: |
+          touch .env
+          echo DB_HOST = "$DB_HOST" >> .env
+          echo DB_PW = "$DB_PW" >> .env
+          echo DB_USER = "$DB_USER" >> .env
+          echo DB_NAME = "$DB_NAME" >> .env
+          echo CLIENT_ID = "$CLIENT_ID" >> .env
+          echo CLIENT_SECRET = "$CLIENT_SECRET" >> .env
+      - run: npm run bundle
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v2.1.1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "deploy/"
+          REMOTE_HOST: "perform.eaglesoftwareteam.com"
+          REMOTE_USER: ubuntu
+          TARGET: "nodeapps/performance/t2"
+      - name: Execute SSH commmands on remote server
+        uses: JimCronqvist/action-ssh@master
+        env:
+          NAME: "Root"
+        with:
+          hosts: "ubuntu@perform.eaglesoftwareteam.com"
+          privateKey: ${{ secrets.SERVER_SSH_KEY }}
+          debug: false
+          command: |
+            cd nodeapps/performance/t2
+            npm install
+            sudo systemctl stop performance-t2-backend
+            sudo cp performance-t2-backend.service /lib/systemd/system/performance-t2-backend.service
+            sudo systemctl daemon-reload
+            sudo systemctl start performance-t2-backend

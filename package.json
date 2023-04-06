@@ -1,0 +1,35 @@
+{
+  "name": "seiv-p2-node",
+  "version": "0.0.0",
+  "description": "OC Music Department Node.js with Rest API",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json performance-t2-backend.service .env deploy"
+  },
+  "keywords": [
+    "node.js",
+    "express",
+    "sequelize"
+  ],
+  "author": "cs",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
+    "express": "~4.16.1",
+    "google-auth-library": "^8.7.0",
+    "googleapis": "^100.0.0",
+    "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^2.4.2",
+    "morgan": "~1.9.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
+    "pug": "^2.0.0-beta11",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0"
+  }
+}
