@@ -18,5 +18,5 @@ module.exports = (app) => {
   // Delete all eventTimeslots
   router.delete("/", [authenticate], eventTimeslot.deleteAll);
 
-  app.use("/performance-t2/eventTimeslot", router);
+  app.use("/performance-t7/eventTimeslot", router);
 };

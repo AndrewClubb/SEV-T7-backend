@@ -18,5 +18,5 @@ module.exports = (app) => {
   // Get all availabilities by userId
   router.get("/userId/:userId", [authenticate], availability.getByUser);
 
-  app.use("/performance-t2/availability", router);
+  app.use("/performance-t7/availability", router);
 };

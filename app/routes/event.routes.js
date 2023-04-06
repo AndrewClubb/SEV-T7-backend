@@ -37,6 +37,5 @@ module.exports = (app) => {
     event.getEventCritiquesBySemesterAndStudent
   );
 
-  //REMEMBER TO RE ADD THE ", [authenticate],"
-  app.use("/performance-t2/event", router);
+  app.use("/performance-t7/event", router);
 };

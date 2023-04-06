@@ -16,5 +16,5 @@ module.exports = (app) => {
   // Delete all critiques
   router.delete("/", [authenticate], critique.deleteAll);
 
-  app.use("/performance-t2/critique", router);
+  app.use("/performance-t7/critique", router);
 };

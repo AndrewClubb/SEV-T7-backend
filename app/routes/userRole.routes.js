@@ -18,5 +18,5 @@ module.exports = (app) => {
   // Get userRoles for userId
   router.get("/roles/userId/:userId", [authenticate], userRole.getRolesForUser);
 
-  app.use("/performance-t2/userRole", router);
+  app.use("/performance-t7/userRole", router);
 };

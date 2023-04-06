@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json performance-t2-backend.service .env deploy"
+    "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json performance-t7-backend.service .env deploy"
   },
   "keywords": [
     "node.js",

@@ -16,5 +16,5 @@ module.exports = (app) => {
   // Delete all jurorTimeslots
   router.delete("/", [authenticate], jurorTimeslot.deleteAll);
 
-  app.use("/performance-t2/jurorTimeslot", router);
+  app.use("/performance-t7/jurorTimeslot", router);
 };

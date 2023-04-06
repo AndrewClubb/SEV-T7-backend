@@ -18,5 +18,5 @@ module.exports = (app) => {
   // Get by userId
   router.get("/userId/:userId", [authenticate], studentInstrument.getByUserId);
 
-  app.use("/performance-t2/studentInstrument", router);
+  app.use("/performance-t7/studentInstrument", router);
 };

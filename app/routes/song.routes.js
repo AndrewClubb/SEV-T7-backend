@@ -18,5 +18,5 @@ module.exports = (app) => {
   // Get by composer Id
   router.get("/composer/:composerId", [authenticate], song.getByComposer);
 
-  app.use("/performance-t2/song", router);
+  app.use("/performance-t7/song", router);
 };

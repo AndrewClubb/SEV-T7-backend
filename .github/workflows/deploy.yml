@@ -42,7 +42,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "perform.eaglesoftwareteam.com"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/performance/t2"
+          TARGET: "nodeapps/performance/t7"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
@@ -52,9 +52,9 @@ jobs:
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
           debug: false
           command: |
-            cd nodeapps/performance/t2
+            cd nodeapps/performance/t7
             npm install
-            sudo systemctl stop performance-t2-backend
-            sudo cp performance-t2-backend.service /lib/systemd/system/performance-t2-backend.service
+            sudo systemctl stop performance-t7-backend
+            sudo cp performance-t2-backend.service /lib/systemd/system/performance-t7-backend.service
             sudo systemctl daemon-reload
-            sudo systemctl start performance-t2-backend
+            sudo systemctl start performance-t7-backend

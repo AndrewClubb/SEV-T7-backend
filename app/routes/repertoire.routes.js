@@ -27,5 +27,5 @@ module.exports = (app) => {
     repertoire.getSemesterStudentRepertoire
   );
 
-  app.use("/performance-t2/repertoire", router);
+  app.use("/performance-t7/repertoire", router);
 };

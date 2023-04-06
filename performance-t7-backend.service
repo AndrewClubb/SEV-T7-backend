@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/nodeapps/performance/t2
+WorkingDirectory=/home/ubuntu/nodeapps/performance/t7
 ExecStart=/usr/bin/npm run start
 Restart=on-failure
 

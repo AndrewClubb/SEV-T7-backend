@@ -16,5 +16,5 @@ module.exports = (app) => {
   // Delete all evaluationComments
   router.delete("/", [authenticate], evaluationComment.deleteAll);
 
-  app.use("/performance-t2/evaluationComment", router);
+  app.use("/performance-t7/evaluationComment", router);
 };
