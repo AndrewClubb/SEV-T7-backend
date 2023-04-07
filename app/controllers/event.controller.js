@@ -482,3 +482,18 @@ exports.getEventsBySemesterId = (req, res) => {
       });
     });
 };
+
+// Get all event types
+exports.getAllEventTypes = (req, res) => {
+  Event.findAll({
+    attributes: [db.sequelize.fn("DISTINCT", db.sequelize.col("type")), "type"],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};
