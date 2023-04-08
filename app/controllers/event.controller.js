@@ -13,9 +13,14 @@ exports.create = (req, res) => {
       message: "Date can not be empty!",
     });
     return;
-  } else if (!req.body.isVisible) {
+  } else if (!req.body.isPrivateEvent) {
     res.status(400).send({
-      message: "isVisible can not be empty!",
+      message: "isPrivateEvent can not be empty!",
+    });
+    return;
+  } else if (!req.body.name) {
+    res.status(400).send({
+      message: "name can not be empty!",
     });
     return;
   } else if (!req.body.canMergeSlots) {
@@ -37,10 +42,11 @@ exports.create = (req, res) => {
 
   const event = {
     type: req.body.type,
+    name: req.body.name,
     date: req.body.date,
     startTime: req.body.startTime,
     endTime: req.body.endTime,
-    isVisible: req.body.isVisible,
+    isPrivateEvent: req.body.isPrivateEvent,
     canMergeSlots: req.body.canMergeSlots,
     slotDuration: req.body.slotDuration,
     semesterId: req.body.semesterId,
