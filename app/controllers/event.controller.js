@@ -13,7 +13,7 @@ exports.create = (req, res) => {
       message: "Date can not be empty!",
     });
     return;
-  } else if (!req.body.isPrivateEvent) {
+  } else if (req.body.isPrivateEvent == undefined) {
     res.status(400).send({
       message: "isPrivateEvent can not be empty!",
     });
@@ -23,7 +23,7 @@ exports.create = (req, res) => {
       message: "name can not be empty!",
     });
     return;
-  } else if (!req.body.canMergeSlots) {
+  } else if (req.body.canMergeSlots == undefined) {
     res.status(400).send({
       message: "canMergeSlots can not be empty!",
     });
