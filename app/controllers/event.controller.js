@@ -1,7 +1,5 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const { event } = require("../models");
-const { raw } = require("body-parser");
 const Event = db.event;
 const StudentTimeslot = db.studentTimeslot;
 
@@ -151,11 +149,10 @@ exports.update = (req, res) => {
 };
 
 // Delete a(n) event with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
-  Event.destroy({
-    where: { id: id },
-  })
+
+  Event.destroy()
     .then((num) => {
       if (num == 1) {
         res.send({

@@ -78,11 +78,9 @@ db.jurorTimeslot.hasMany(db.critique, {
 
 db.critique.belongsTo(db.studentTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.critique.belongsTo(db.jurorTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
 //Evaluation FKs
@@ -128,12 +126,12 @@ db.event.belongsTo(db.semester);
 db.userRole.hasMany(db.eventTimeslot, {
   foreignKey: { name: "accompanistId" },
 });
-db.event.hasMany(db.eventTimeslot);
+db.event.hasMany(db.eventTimeslot, { onDelete: "CASCADE", hooks: true });
 
 db.eventTimeslot.belongsTo(db.userRole, {
   foreignKey: { name: "accompanistId" },
 });
-db.eventTimeslot.belongsTo(db.event);
+db.eventTimeslot.belongsTo(db.event, { onDelete: "CASCADE" });
 
 //Repertoire FKs
 db.studentInstrument.hasMany(db.repertoire, {
