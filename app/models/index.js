@@ -78,11 +78,9 @@ db.jurorTimeslot.hasMany(db.critique, {
 
 db.critique.belongsTo(db.studentTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.critique.belongsTo(db.jurorTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
 //Evaluation FKs
@@ -138,11 +136,9 @@ db.eventTimeslot.belongsTo(db.event);
 //Repertoire FKs
 db.studentInstrument.hasMany(db.repertoire, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.song.hasMany(db.repertoire, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.semester.hasMany(db.repertoire);
 
@@ -154,7 +150,6 @@ db.repertoire.belongsTo(db.semester);
 //Song FKs
 db.composer.hasMany(db.song, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.song.belongsTo(db.composer);
@@ -162,7 +157,6 @@ db.song.belongsTo(db.composer);
 //SongTranslation FKs
 db.song.hasMany(db.songTranslation, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.songTranslation.belongsTo(db.song);
@@ -171,11 +165,9 @@ db.songTranslation.belongsTo(db.song);
 db.userRole.hasMany(db.studentInstrument, {
   as: "student",
   foreignKey: { name: "studentId", allowNull: false },
-  onDelete: "CASCADE",
 });
 db.instrument.hasMany(db.studentInstrument, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.userRole.hasMany(db.studentInstrument, {
   as: "accompanist",
@@ -184,7 +176,6 @@ db.userRole.hasMany(db.studentInstrument, {
 db.userRole.hasMany(db.studentInstrument, {
   as: "instructor",
   foreignKey: { name: "instructorId", allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.studentInstrument.belongsTo(db.userRole, { as: "student" });
@@ -195,15 +186,12 @@ db.studentInstrument.belongsTo(db.instrument);
 //StudentTimeslot FKs
 db.studentInstrument.hasMany(db.studentTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.eventTimeslot.hasMany(db.studentTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.userRole.hasMany(db.studentTimeslot, {
   foreignKey: { name: "instructorId", allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.studentTimeslot.belongsTo(db.studentInstrument);
@@ -212,17 +200,15 @@ db.studentTimeslot.belongsTo(db.userRole, {
   foreignKey: { name: "instructorId" },
 });
 
-//TimeslotSong KFs
-db.studentTimeslot.hasMany(db.timeslotSong, {
+//TimeslotSong FKs
+db.eventTimeslot.hasMany(db.timeslotSong, {
   foreignKey: { name: "timeslotId", allowNull: false },
-  onDelete: "CASCADE",
 });
 db.song.hasMany(db.timeslotSong, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
-db.timeslotSong.belongsTo(db.studentTimeslot, {
+db.timeslotSong.belongsTo(db.eventTimeslot, {
   foreignKey: { name: "timeslotId" },
 });
 db.timeslotSong.belongsTo(db.song);
@@ -230,7 +216,6 @@ db.timeslotSong.belongsTo(db.song);
 //UserRole FKs
 db.user.hasMany(db.userRole, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.userRole.belongsTo(db.user);
@@ -238,7 +223,6 @@ db.userRole.belongsTo(db.user);
 //Session FKs
 db.user.hasMany(db.session, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.session.belongsTo(db.user);
@@ -246,11 +230,9 @@ db.session.belongsTo(db.user);
 // JurorTimeslot FKs
 db.eventTimeslot.hasMany(db.jurorTimeslot, {
   foreignKey: { allowNull: false },
-  onDelete: "CASCADE",
 });
 db.userRole.hasMany(db.jurorTimeslot, {
   foreignKey: { name: "jurorId", allowNull: false },
-  onDelete: "CASCADE",
 });
 
 db.jurorTimeslot.belongsTo(db.eventTimeslot);

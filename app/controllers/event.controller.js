@@ -1,7 +1,5 @@
 const db = require("../models");
 const { Op } = require("sequelize");
-const { event } = require("../models");
-const { raw } = require("body-parser");
 const Event = db.event;
 const StudentTimeslot = db.studentTimeslot;
 
@@ -13,12 +11,17 @@ exports.create = (req, res) => {
       message: "Date can not be empty!",
     });
     return;
-  } else if (!req.body.isVisible) {
+  } else if (req.body.isPrivateEvent == undefined) {
     res.status(400).send({
-      message: "isVisible can not be empty!",
+      message: "isPrivateEvent can not be empty!",
     });
     return;
-  } else if (!req.body.canMergeSlots) {
+  } else if (!req.body.name) {
+    res.status(400).send({
+      message: "name can not be empty!",
+    });
+    return;
+  } else if (req.body.canMergeSlots == undefined) {
     res.status(400).send({
       message: "canMergeSlots can not be empty!",
     });
@@ -37,10 +40,11 @@ exports.create = (req, res) => {
 
   const event = {
     type: req.body.type,
+    name: req.body.name,
     date: req.body.date,
     startTime: req.body.startTime,
     endTime: req.body.endTime,
-    isVisible: req.body.isVisible,
+    isPrivateEvent: req.body.isPrivateEvent,
     canMergeSlots: req.body.canMergeSlots,
     slotDuration: req.body.slotDuration,
     semesterId: req.body.semesterId,
@@ -145,28 +149,81 @@ exports.update = (req, res) => {
 };
 
 // Delete a(n) event with the specified id in the request
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
-  Event.destroy({
-    where: { id: id },
+
+  //get all student timeslots
+  Event.findAll({
+    where: {
+      id: { [Op.eq]: id },
+    },
+    include: {
+      model: db.eventTimeslot,
+      required: false,
+      include: [
+        {
+          model: db.studentTimeslot,
+          required: false,
+        },
+        {
+          model: db.jurorTimeslot,
+          required: false,
+        },
+        {
+          model: db.timeslotSong,
+          required: false,
+        },
+      ],
+    },
   })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Event was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message:
-            "Cannot delete event with id=" +
-            id +
-            ". Maybe the event was not found",
-        });
+    .then(async (data) => {
+      for (let x = 0; x < data[0].dataValues.eventTimeslots.length; x++) {
+        const curEventTS = data[0].dataValues.eventTimeslots[x].dataValues;
+        for (let y = 0; y < curEventTS.studentTimeslots.length; y++) {
+          const curStuTS = curEventTS.studentTimeslots[y].dataValues;
+          await db.studentTimeslot.destroy({
+            where: { id: curStuTS.id },
+          });
+        }
+        for (let y = 0; y < curEventTS.jurorTimeslots.length; y++) {
+          const curJurTS = curEventTS.jurorTimeslots[y].dataValues;
+          await db.jurorTimeslot.destroy({ where: { id: curJurTS.id } });
+        }
+        for (let y = 0; y < curEventTS.timeslotSongs.length; y++) {
+          const curTSS = curEventTS.timeslotSongs[y].dataValues;
+          await db.timeslotSong.destroy({ where: { id: curTSS.id } });
+        }
+
+        db.eventTimeslot.destroy({ where: { id: curEventTS.id } });
       }
+
+      Event.destroy({
+        where: { id: id },
+      })
+        .then((num) => {
+          if (num == 1) {
+            res.send({
+              message: "Event was deleted successfully!",
+            });
+          } else {
+            res.send({
+              message:
+                "Cannot delete event with id=" +
+                id +
+                ". Maybe the event was not found",
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: "Could not delete event with id=" + id,
+          });
+        });
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete event with id=" + id,
+        message: "Error finding event with id=" + id,
+        error: err,
       });
     });
 };
@@ -457,6 +514,36 @@ exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
         ],
       },
     ],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};
+
+// Retrieve all events by semester
+exports.getEventsBySemesterId = (req, res) => {
+  Event.findAll({
+    where: { semesterId: { [Op.eq]: req.params.semesterId } },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving events.",
+      });
+    });
+};
+
+// Get all event types
+exports.getAllEventTypes = (req, res) => {
+  Event.findAll({
+    attributes: [db.sequelize.fn("DISTINCT", db.sequelize.col("type")), "type"],
   })
     .then((data) => {
       res.send(data);

@@ -27,6 +27,7 @@ exports.create = (req, res) => {
     endTime: req.body.endTime,
     hasPassed: req.body.hasPassed,
     isComplete: req.body.isComplete,
+    isReserved: req.body.isReserved,
     accompanistId: req.body.accompanistId,
     eventId: req.body.eventId,
   };
@@ -133,26 +134,72 @@ exports.update = (req, res) => {
 // Delete a(n) eventTimeslot with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
-  EventTimeslot.destroy({
-    where: { id: id },
+
+  //get all student timeslots
+  EventTimeslot.findAll({
+    where: {
+      id: { [Op.eq]: id },
+    },
+    include: [
+      {
+        model: db.studentTimeslot,
+        required: false,
+      },
+      {
+        model: db.jurorTimeslot,
+        required: false,
+      },
+      {
+        model: db.timeslotSong,
+        required: false,
+      },
+    ],
   })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "EventTimeslot was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message:
-            "Cannot delete eventTimeslot with id=" +
-            id +
-            ". Maybe the eventTimeslot was not found",
+    .then(async (data) => {
+      const curEventTS = data[0].dataValues;
+
+      for (let y = 0; y < curEventTS.studentTimeslots.length; y++) {
+        const curStuTS = curEventTS.studentTimeslots[y].dataValues;
+        await db.studentTimeslot.destroy({
+          where: { id: curStuTS.id },
         });
       }
+      for (let y = 0; y < curEventTS.jurorTimeslots.length; y++) {
+        const curJurTS = curEventTS.jurorTimeslots[y].dataValues;
+        await db.jurorTimeslot.destroy({ where: { id: curJurTS.id } });
+      }
+      for (let y = 0; y < curEventTS.timeslotSongs.length; y++) {
+        const curTSS = curEventTS.timeslotSongs[y].dataValues;
+        await db.timeslotSong.destroy({ where: { id: curTSS.id } });
+      }
+
+      EventTimeslot.destroy({
+        where: { id: id },
+      })
+        .then((num) => {
+          if (num == 1) {
+            res.send({
+              message: "Event was deleted successfully!",
+            });
+          } else {
+            res.send({
+              message:
+                "Cannot delete event with id=" +
+                id +
+                ". Maybe the event was not found",
+            });
+          }
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: "Could not delete eventTimeslot with id=" + id,
+          });
+        });
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete eventTimeslot with id=" + id,
+        message: "Error finding eventTimeslot with id=" + id,
+        error: err,
       });
     });
 };

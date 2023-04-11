@@ -37,6 +37,15 @@ module.exports = (app) => {
     [authenticate],
     event.getEventCritiquesBySemesterAndStudent
   );
+  // Retrieve all events within a semester
+  router.get(
+    "/semesterId/:semesterId",
+    [authenticate],
+    event.getEventsBySemesterId
+  );
+
+  // Get all event types
+  router.get("/types/unique", [authenticate], event.getAllEventTypes);
 
   app.use("/performance-t7/event", router);
 };
