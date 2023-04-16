@@ -15,9 +15,9 @@ exports.create = (req, res) => {
       message: "instrumentId can not be empty!",
     });
     return;
-  } else if (!req.body.instructorId) {
+  } else if (!req.body.facultyId) {
     res.status(400).send({
-      message: "instructorId can not be empty!",
+      message: "facultyId can not be empty!",
     });
     return;
   }
@@ -27,7 +27,7 @@ exports.create = (req, res) => {
     studentId: req.body.studentId,
     instrumentId: req.body.instrumentId,
     accompanistId: req.body.accompanistId,
-    instructorId: req.body.instructorId,
+    facultyId: req.body.facultyId,
   };
 
   // Create and Save a new studentInstrument
@@ -170,7 +170,7 @@ exports.getByUserId = (req, res) => {
       },
       {
         model: db.userRole,
-        as: "instructor",
+        as: "faculty",
         required: true,
         include: {
           model: db.user,
