@@ -15,9 +15,9 @@ exports.create = (req, res) => {
       message: "eventTimeslotId can not be empty!",
     });
     return;
-  } else if (!req.body.instructorId) {
+  } else if (!req.body.facultyId) {
     res.status(400).send({
-      message: "instructorId can not be empty!",
+      message: "facultyId can not be empty!",
     });
     return;
   }
@@ -25,7 +25,7 @@ exports.create = (req, res) => {
   const studentTimeslot = {
     studentInstrumentId: req.body.studentInstrumentId,
     eventTimeslotId: req.body.eventTimeslotId,
-    instructorId: req.body.instructorId,
+    facultyId: req.body.facultyId,
   };
 
   // Create and Save a new studentTimeslot

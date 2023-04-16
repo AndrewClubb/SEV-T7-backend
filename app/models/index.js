@@ -174,12 +174,12 @@ db.userRole.hasMany(db.studentInstrument, {
   foreignKey: { name: "accompanistId" },
 });
 db.userRole.hasMany(db.studentInstrument, {
-  as: "instructor",
-  foreignKey: { name: "instructorId", allowNull: false },
+  as: "faculty",
+  foreignKey: { name: "facultyId", allowNull: false },
 });
 
 db.studentInstrument.belongsTo(db.userRole, { as: "student" });
-db.studentInstrument.belongsTo(db.userRole, { as: "instructor" });
+db.studentInstrument.belongsTo(db.userRole, { as: "faculty" });
 db.studentInstrument.belongsTo(db.userRole, { as: "accompanist" });
 db.studentInstrument.belongsTo(db.instrument);
 
@@ -191,13 +191,13 @@ db.eventTimeslot.hasMany(db.studentTimeslot, {
   foreignKey: { allowNull: false },
 });
 db.userRole.hasMany(db.studentTimeslot, {
-  foreignKey: { name: "instructorId", allowNull: false },
+  foreignKey: { name: "facultyId", allowNull: false },
 });
 
 db.studentTimeslot.belongsTo(db.studentInstrument);
 db.studentTimeslot.belongsTo(db.eventTimeslot);
 db.studentTimeslot.belongsTo(db.userRole, {
-  foreignKey: { name: "instructorId" },
+  foreignKey: { name: "facultyId" },
 });
 
 //TimeslotSong FKs

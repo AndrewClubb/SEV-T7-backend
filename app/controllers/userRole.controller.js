@@ -15,6 +15,11 @@ exports.create = (req, res) => {
       message: "userId can not be empty!",
     });
     return;
+  } else if (!req.body.isActive) {
+    res.status(400).send({
+      message: "isActive can not be empty!",
+    });
+    return;
   }
 
   const userRole = {
@@ -26,6 +31,8 @@ exports.create = (req, res) => {
     stuEmailCritiqueBool: req.body.stuEmailCritiqueBool,
     stuCompletedHearing: req.body.stuCompletedHearing,
     title: req.body.title,
+    isInstructor: req.body.isInstructor,
+    isActive: req.body.isActive,
     userId: req.body.userId,
   };
 
