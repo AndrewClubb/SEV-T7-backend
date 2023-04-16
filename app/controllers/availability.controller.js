@@ -175,3 +175,22 @@ exports.getByUser = (req, res) => {
       });
     });
 };
+
+//
+exports.getByUserAndEvent = (req, res) => {
+  Availability.findAll({
+    where: {
+      userId: { [Op.eq]: req.params.userId },
+      eventId: { [Op.eq]: req.params.eventId },
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Availabilities.",
+      });
+    });
+};
