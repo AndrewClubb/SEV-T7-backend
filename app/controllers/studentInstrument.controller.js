@@ -169,6 +169,36 @@ exports.getByUserId = (req, res) => {
         },
       },
       {
+        model: db.userRole,
+        as: "faculty",
+        required: true,
+        include: {
+          model: db.user,
+          required: true,
+          include: [
+            {
+              model: db.availability,
+              required: false,
+            },
+          ],
+        },
+      },
+      {
+        model: db.userRole,
+        as: "accompanist",
+        required: false,
+        include: {
+          model: db.user,
+          required: true,
+          include: [
+            {
+              model: db.availability,
+              required: false,
+            },
+          ],
+        },
+      },
+      {
         model: db.instrument,
         required: true,
       },
