@@ -69,6 +69,59 @@ exports.login = async (req, res) => {
       .catch((err) => {
         res.status(500).send({ message: err.message });
       });
+
+    //REMOVE THIS CODE AFTER CELEBRATION OF EXCELENCE
+    //****************************************************
+
+    //create userRole for student
+    var userRoleData = {
+      role: "Student",
+      isActive: 1,
+      userId: user.id,
+    };
+
+    await db.userRole
+      .create(userRoleData)
+      .then((data) => {
+        userRoleData = data.dataValues;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    //create studentInstrument
+    var studentInstrumentData1 = {
+      studentId: userRoleData.id,
+      instrumentId: 18,
+      facultyId: 1060,
+    };
+
+    await db.studentInstrument
+      .create(studentInstrumentData1)
+      .then((data) => {
+        studentInstrumentData1 = data.dataValues;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    var studentInstrumentData2 = {
+      studentId: userRoleData.id,
+      instrumentId: 3,
+      accompanistId: 1054,
+      facultyId: 1060,
+    };
+
+    await db.studentInstrument
+      .create(studentInstrumentData2)
+      .then((data) => {
+        studentInstrumentData2 = data.dataValues;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    //****************************************************
   } else {
     console.log(user);
     // doing this to ensure that the user's name is the one listed with Google
