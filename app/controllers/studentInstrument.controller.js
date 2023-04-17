@@ -186,7 +186,7 @@ exports.getByUserId = (req, res) => {
       {
         model: db.userRole,
         as: "accompanist",
-        required: true,
+        required: false,
         include: {
           model: db.user,
           required: true,
