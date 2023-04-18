@@ -158,6 +158,7 @@ exports.getRolesForUser = (req, res) => {
   UserRole.findAll({
     where: {
       userId: { [Op.eq]: req.params.userId },
+      isActive: { [Op.eq]: 1 },
     },
   })
     .then((data) => {
