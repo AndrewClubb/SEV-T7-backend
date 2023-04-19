@@ -17,13 +17,12 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], event.delete);
   // Delete all events
   router.delete("/", [authenticate], event.deleteAll);
-  // Retrieve timeslots fore current date
+  // Retrieve timeslots for eventId
   router.get(
-    "/critiqueTimeslots/:date",
+    "/critiqueTimeslots/:eventId",
     [authenticate],
-    event.getStudentTimeslotsForCurrentDate
+    event.getStudentTimeslotsForEventId
   );
-
   // Retrieve critiques by semester id
   router.get(
     "/semesterCritiques/:semesterId",

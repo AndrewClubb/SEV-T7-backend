@@ -244,121 +244,33 @@ exports.deleteAll = (req, res) => {
     });
 };
 
-exports.getStudentTimeslotsForCurrentDate = (req, res) => {
+exports.getStudentTimeslotsForEventId = (req, res) => {
   Event.findAll({
-    where: {
-      date: { [Op.eq]: req.params.date },
-    },
-    attributes: ["id", "type", "date"],
+    where: { id: req.params.eventId },
     include: {
       model: db.eventTimeslot,
-      required: false /*false for Left Outer -debug use*/,
-      attributes: ["id", "startTime", "endTime"],
+      required: true,
       include: {
         model: db.studentTimeslot,
         required: true,
-        attributes: ["id"],
         include: {
           model: db.studentInstrument,
           required: true,
-          attributes: ["id"],
-          include: [
-            {
-              model: db.instrument,
+          include: {
+            model: db.userRole,
+            required: true,
+            as: "student",
+            include: {
+              model: db.user,
               required: true,
-              attributes: ["id", "name", "type"],
             },
-            {
-              model: db.userRole,
-              required: true,
-              as: "student",
-              attributes: ["id"],
-              include: {
-                model: db.user,
-                required: true,
-                attributes: ["id", "fName", "lName"],
-              },
-            },
-          ],
+          },
         },
       },
     },
   })
-    // .then((data) => {
-    //   res.send(data);
-    // })
     .then((data) => {
-      let text = "[";
-      let performingStudents = "";
-      for (let eI = 0; eI < data.length; eI++) {
-        let curEvent = data[eI].dataValues;
-        text +=
-          '{"eventId":"' +
-          curEvent.id +
-          '","eventType":"' +
-          curEvent.type +
-          '","eventDate":"' +
-          curEvent.date +
-          '","timeslots":[';
-        for (let etI = 0; etI < curEvent.eventTimeslots.length; etI++) {
-          let curEventTs = curEvent.eventTimeslots[etI].dataValues;
-          text +=
-            '{"eventTimeslotId":"' +
-            curEventTs.id +
-            '","startTime":"' +
-            curEventTs.startTime +
-            '","endTime":"' +
-            curEventTs.endTime +
-            '","students":[';
-          for (let stI = 0; stI < curEventTs.studentTimeslots.length; stI++) {
-            let curStudentTs = curEventTs.studentTimeslots[stI].dataValues;
-            let student = curStudentTs.studentInstrument.dataValues.student;
-            text +=
-              '{"studentId":"' +
-              student.dataValues.user.dataValues.id +
-              '","studentTimeslotId":"' +
-              curStudentTs.id +
-              '","fName":"' +
-              student.dataValues.user.dataValues.fName +
-              '","lName":"' +
-              student.dataValues.user.dataValues.lName +
-              '","instrumentName":"' +
-              curStudentTs.studentInstrument.dataValues.instrument.dataValues
-                .name +
-              '","instrumentType":"' +
-              curStudentTs.studentInstrument.dataValues.instrument.dataValues
-                .type +
-              '"}';
-
-            performingStudents +=
-              student.dataValues.user.dataValues.fName +
-              " " +
-              student.dataValues.user.dataValues.lName;
-
-            if (curEventTs.studentTimeslots.length - stI > 1) {
-              text += ",";
-            }
-            if (curEventTs.studentTimeslots.length - stI > 1) {
-              performingStudents += ", ";
-            }
-          }
-          text += "],";
-          text += '"performingStudents":"' + performingStudents + '"';
-          if (curEvent.eventTimeslots.length - etI > 1) {
-            text += ",";
-          }
-          text += "}";
-        }
-        // text += "]}]}";
-        text += "]}";
-        if (data.length - eI > 1) {
-          text += ",";
-        }
-      }
-      text += "]";
-      res.send(JSON.parse(text));
-      // res.send(text);
-      // res.send();
+      res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
