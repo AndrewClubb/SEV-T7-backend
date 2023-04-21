@@ -17,7 +17,6 @@ module.exports = (sequelize, Sequelize) => {
       },
       comment: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
     },
     {

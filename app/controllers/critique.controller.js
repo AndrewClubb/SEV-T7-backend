@@ -10,11 +10,6 @@ exports.create = (req, res) => {
       message: "type can not be empty!",
     });
     return;
-  } else if (!req.body.comment) {
-    res.status(400).send({
-      message: "comment can not be empty!",
-    });
-    return;
   } else if (!req.body.jurorTimeslotId) {
     res.status(400).send({
       message: "jurorTimeslotId can not be empty!",
@@ -31,9 +26,7 @@ exports.create = (req, res) => {
     type: req.body.type,
     grade: req.body.grade,
     comment: req.body.comment,
-    //critiquerId: req.body.critiquerId,
     jurorTimeslotId: req.body.jurorTimeslotId,
-    // timeslotId: req.body.timeslotId,
     studentTimeslotId: req.body.studentTimeslotId,
   };
 
