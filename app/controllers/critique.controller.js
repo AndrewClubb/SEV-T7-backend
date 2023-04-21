@@ -154,3 +154,29 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+exports.getCritiquesByTimeslotAndFaculty = (req, res) => {
+  db.eventTimeslot
+    .findAll({
+      where: { id: req.params.timeslotId },
+      include: {
+        model: db.studentTimeslot,
+        required: true,
+        include: {
+          model: db.critique,
+          required: true,
+          include: {
+            model: db.jurorTimeslot,
+            required: true,
+            where: { jurorId: req.params.facultyId },
+          },
+        },
+      },
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
+    });
+};

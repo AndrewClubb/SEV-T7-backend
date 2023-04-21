@@ -15,6 +15,12 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], timeslotSong.delete);
   // Delete all timeslotSongs
   router.delete("/", [authenticate], timeslotSong.deleteAll);
+  // Get all songs by timeslot
+  router.get(
+    "/timeslotId/:timeslotId",
+    [authenticate],
+    timeslotSong.getByEventId
+  );
 
   app.use("/performance-t7/timeslotSong", router);
 };

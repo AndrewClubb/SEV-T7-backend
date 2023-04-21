@@ -15,6 +15,12 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], critique.delete);
   // Delete all critiques
   router.delete("/", [authenticate], critique.deleteAll);
+  // get ritiques by timeslot and faculty
+  router.get(
+    "/timeslotId/:timeslotId/facultyId/:facultyId",
+    [authenticate],
+    critique.getCritiquesByTimeslotAndFaculty
+  );
 
   app.use("/performance-t7/critique", router);
 };
