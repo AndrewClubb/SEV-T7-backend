@@ -15,6 +15,12 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], songTranslation.delete);
   // Delete all songTranslations
   router.delete("/", [authenticate], songTranslation.deleteAll);
+  //
+  router.get(
+    "/pieceId/:pieceId",
+    [authenticate],
+    songTranslation.findByPieceId
+  );
 
   app.use("/performance-t7/songTranslation", router);
 };
