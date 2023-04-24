@@ -143,3 +143,20 @@ exports.deleteAll = (req, res) => {
       });
     });
 };
+
+exports.getAllWithRoles = (req, res) => {
+  User.findAll({
+    include: {
+      model: db.userRole,
+      required: true,
+    },
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving users.",
+      });
+    });
+};
