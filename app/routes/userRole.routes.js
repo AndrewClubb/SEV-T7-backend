@@ -17,6 +17,8 @@ module.exports = (app) => {
   router.delete("/", [authenticate], userRole.deleteAll);
   // Get userRoles for userId
   router.get("/roles/userId/:userId", [authenticate], userRole.getRolesForUser);
+  // Get all roles in the system
+  router.get("/roles/unique", [authenticate], userRole.getUniqueRoles);
 
   app.use("/performance-t7/userRole", router);
 };
