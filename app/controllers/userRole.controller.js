@@ -171,3 +171,17 @@ exports.getRolesForUser = (req, res) => {
       });
     });
 };
+
+exports.getUniqueRoles = (req, res) => {
+  UserRole.findAll({
+    attributes: [db.sequelize.fn("DISTINCT", db.sequelize.col("role")), "role"],
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving roles.",
+      });
+    });
+};

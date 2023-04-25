@@ -15,6 +15,8 @@ module.exports = (app) => {
   router.delete("/:id", [authenticate], user.delete);
   // Delete all users
   router.delete("/", [authenticate], user.deleteAll);
+  // Get all users and attached roles
+  router.get("/all/roles", [authenticate], user.getAllWithRoles);
 
   app.use("/performance-t7/user", router);
 };
