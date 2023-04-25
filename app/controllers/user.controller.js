@@ -148,7 +148,7 @@ exports.getAllWithRoles = (req, res) => {
   User.findAll({
     include: {
       model: db.userRole,
-      required: true,
+      required: false,
     },
   })
     .then((data) => {
