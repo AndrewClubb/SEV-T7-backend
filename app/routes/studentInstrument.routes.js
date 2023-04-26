@@ -17,6 +17,12 @@ module.exports = (app) => {
   router.delete("/", [authenticate], studentInstrument.deleteAll);
   // Get by userId
   router.get("/userId/:userId", [authenticate], studentInstrument.getByUserId);
+  // Get students for instructor id
+  router.get(
+    "/students/instructorId/:id",
+    [authenticate],
+    studentInstrument.getStudentsForInstructorId
+  );
 
   app.use("/performance-t7/studentInstrument", router);
 };

@@ -31,6 +31,7 @@ exports.login = async (req, res) => {
   let email = googleUser.email;
   let firstName = googleUser.given_name;
   let lastName = googleUser.family_name;
+  let picture = googleUser.picture;
 
   let user = {};
   let session = {};
@@ -49,6 +50,7 @@ exports.login = async (req, res) => {
           fName: firstName,
           lName: lastName,
           email: email,
+          picture: picture,
         };
       }
     })
@@ -74,6 +76,7 @@ exports.login = async (req, res) => {
     // doing this to ensure that the user's name is the one listed with Google
     user.fName = firstName;
     user.lName = lastName;
+    user.picture = picture;
     console.log(user);
     await User.update(user, { where: { id: user.id } })
       .then((num) => {
@@ -171,6 +174,7 @@ exports.login = async (req, res) => {
           email: user.email,
           fName: user.fName,
           lName: user.lName,
+          picture: user.picture,
           userId: user.id,
           lastRole: user.lastRole,
           token: token,

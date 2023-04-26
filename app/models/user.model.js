@@ -20,6 +20,9 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      picture: {
+        type: Sequelize.STRING,
+      },
       lastRole: {
         type: Sequelize.STRING,
       },
