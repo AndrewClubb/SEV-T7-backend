@@ -219,15 +219,22 @@ exports.getByUserId = (req, res) => {
 exports.getStudentsForInstructorId = (req, res) => {
   StudentInstrument.findAll({
     where: { facultyId: req.params.id },
-    include: {
-      model: db.userRole,
-      required: true,
-      as: "student",
-      include: {
-        model: db.user,
+    include: [
+      {
+        model: db.userRole,
         required: true,
+        as: "student",
+        include: {
+          model: db.user,
+          required: true,
+        },
       },
-    },
+      {
+        model: db.instrument,
+        required: true,
+        as: "instrument",
+      },
+    ],
     group: ["student.userId"],
   })
     .then((data) => {
