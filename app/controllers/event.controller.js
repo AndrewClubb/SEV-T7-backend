@@ -398,6 +398,9 @@ exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
               required: true,
               include: {
                 model: db.user,
+                where: {
+                  id: { [Op.eq]: req.params.userId },
+                },
                 required: true,
               },
             },
