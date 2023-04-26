@@ -280,58 +280,6 @@ exports.getStudentTimeslotsForEventId = (req, res) => {
 };
 
 exports.getEventCritiquesBySemesterId = (req, res) => {
-  // Event.findAll({
-  //   where: {
-  //     semesterId: { [Op.eq]: req.params.semesterId },
-  //   },
-  //   include: {
-  //     model: db.eventTimeslot,
-  //     required: true,
-  //     include: [
-  //       {
-  //         model: db.studentTimeslot,
-  //         required: true,
-  //         include: {
-  //           model: db.studentInstrument,
-  //           required: true,
-  //           include: [
-  //             {
-  //               model: db.instrument,
-  //               required: true,
-  //             },
-  //             {
-  //               model: db.userRole,
-  //               as: "student",
-  //               required: true,
-  //               include: {
-  //                 model: db.user,
-  //                 required: true,
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //       {
-  //         model: db.jurorTimeslot,
-  //         required: true,
-  //         include: [
-  //           {
-  //             model: db.userRole,
-  //             required: true,
-  //             include: {
-  //               model: db.user,
-  //               required: true,
-  //             },
-  //           },
-  //           {
-  //             model: db.critique,
-  //             required: true,
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // })
   db.user
     .findAll({
       include: {
@@ -344,17 +292,23 @@ exports.getEventCritiquesBySemesterId = (req, res) => {
           include: {
             model: db.studentTimeslot,
             required: true,
-            include: {
-              model: db.eventTimeslot,
-              required: true,
-              include: {
-                model: db.event,
+            include: [
+              {
+                model: db.eventTimeslot,
                 required: true,
-                where: {
-                  semesterId: { [Op.eq]: req.params.semesterId },
+                include: {
+                  model: db.event,
+                  required: true,
+                  where: {
+                    semesterId: { [Op.eq]: req.params.semesterId },
+                  },
                 },
               },
-            },
+              {
+                model: db.critique,
+                required: true,
+              },
+            ],
           },
         },
       },
@@ -396,6 +350,9 @@ exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
                 required: true,
                 include: {
                   model: db.user,
+                  where: {
+                    id: { [Op.eq]: req.params.userId },
+                  },
                   required: true,
                 },
               },
@@ -411,9 +368,6 @@ exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
               required: true,
               include: {
                 model: db.user,
-                where: {
-                  id: { [Op.eq]: req.params.userId },
-                },
                 required: true,
               },
             },
