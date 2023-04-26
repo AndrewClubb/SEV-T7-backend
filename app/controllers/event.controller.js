@@ -358,74 +358,57 @@ exports.getEventCritiquesBySemesterId = (req, res) => {
 
 // Retrieve critiques by semester id and student id
 exports.getEventCritiquesBySemesterAndStudent = (req, res) => {
-  StudentTimeslot.findAll({
-    attributes: ["id"],
-    include: [
-      {
-        model: db.studentInstrument,
-        required: true,
-        attributes: ["id"],
-        include: [
-          {
-            model: db.userRole,
+  Event.findAll({
+    where: {
+      semesterId: { [Op.eq]: req.params.semesterId },
+    },
+    include: {
+      model: db.eventTimeslot,
+      required: true,
+      include: [
+        {
+          model: db.studentTimeslot,
+          required: true,
+          include: {
+            model: db.studentInstrument,
             required: true,
-            as: "student",
-            attributes: ["id", "title"],
-            where: {
-              userId: { [Op.eq]: req.params.userId },
-            },
-            include: {
-              model: db.user,
-              required: true,
-              attributes: ["id", "fName", "lName"],
-            },
-          },
-          {
-            model: db.instrument,
-            required: true,
-            attributes: ["id", "name"],
-          },
-        ],
-      },
-      {
-        model: db.eventTimeslot,
-        required: true,
-        subQuery: false,
-        attributes: ["id"],
-        include: [
-          {
-            model: db.event,
-            required: true,
-            where: {
-              semesterId: { [Op.eq]: req.params.semesterId },
-            },
-            attributes: ["id", "date", "type"],
-          },
-          {
-            model: db.jurorTimeslot,
-            required: true,
-            attributes: ["id"],
             include: [
               {
-                model: db.userRole,
+                model: db.instrument,
                 required: true,
-                attributes: ["id", "title"],
+              },
+              {
+                model: db.userRole,
+                as: "student",
+                required: true,
                 include: {
                   model: db.user,
                   required: true,
-                  attributes: ["id", "fName", "lName"],
                 },
-              },
-              {
-                model: db.critique,
-                required: true,
-                attributes: ["id", "type", "grade", "comment"],
               },
             ],
           },
-        ],
-      },
-    ],
+        },
+        {
+          model: db.jurorTimeslot,
+          required: true,
+          include: [
+            {
+              model: db.userRole,
+              required: true,
+              include: {
+                model: db.user,
+                required: true,
+              },
+            },
+            {
+              model: db.critique,
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
   })
     .then((data) => {
       res.send(data);
